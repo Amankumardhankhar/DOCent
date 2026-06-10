@@ -1,3 +1,13 @@
+---
+title: DOCent
+emoji: 📚
+colorFrom: purple
+colorTo: pink
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # DOCent
 
 **AI-Powered Document Question Answering System**

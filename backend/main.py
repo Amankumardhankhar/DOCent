@@ -1,5 +1,7 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 from config import settings
 from database import init_db
@@ -28,11 +30,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(documents.router)
-app.include_router(query.router)
-app.include_router(workflow.router)
+app.include_router(documents.router, prefix="/api")
+app.include_router(query.router, prefix="/api")
+app.include_router(workflow.router, prefix="/api")
 
 
-@app.get("/health")
+@app.get("/api/health")
 async def health():
     return {"status": "ok"}
+
+
+# Serve the built React frontend from the same origin when present (Docker/HF Spaces).
+# Skipped during local dev where Vite serves the frontend on its own port.
+frontend_dist = os.getenv("FRONTEND_DIST", "/app/frontend_dist")
+if os.path.isdir(frontend_dist):
+    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")
