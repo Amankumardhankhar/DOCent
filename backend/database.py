@@ -6,8 +6,8 @@ from config import settings
 engine = create_async_engine(settings.database_url, echo=False)
 AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
-# ChromaDB persistent client — stores vectors on disk at ./chroma_db/
-chroma_client = chromadb.PersistentClient(path="./chroma_db")
+# ChromaDB persistent client — path is configurable so prod can point at a mounted disk
+chroma_client = chromadb.PersistentClient(path=settings.chroma_path)
 chunks_collection = chroma_client.get_or_create_collection(
     name="document_chunks",
     metadata={"hnsw:space": "cosine"},

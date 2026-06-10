@@ -4,6 +4,8 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     gemini_api_key: str
     database_url: str = "sqlite+aiosqlite:///./documents.db"
+    chroma_path: str = "./chroma_db"
+    cors_origins: str = "http://localhost:5173,http://localhost:3000"
     chunk_size: int = 500
     chunk_overlap: int = 50
     top_k_chunks: int = 5
